@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Regexp</title>
+</head>
+<body>
+<div id="telReg">
+    <label for="tel">Telephone number : </label>
+    <input id="tel" type="text" placeholder="Example: 18812011232">
+    <button>test</button>
+</div>
+<br>
+<div id="repeatWordReg">
+    <label for="word">Repeat word : </label>
+    <input id="word" type="text" placeholder="Example: foo foo bar">
+    <button>test</button>
+</div>
+<script>
+    const $ = d => document.querySelector(d)
+    $('#telReg button').addEventListener('click', e => {
+        if (/^(13\d|15[012356789]|17[678]|18\d|14[57])\d{8}$/.test($('#tel').value.trim())) alert('true')
+        else alert('false')
+    }, false)
+    $('#repeatWordReg button').addEventListener('click', e => {
+        let words = $('#word').value.trim().split(' '),
+            falg = false
+        words.forEach((word, index) => {
+            let arr = words
+            let reg = new RegExp(word,'g')
+            arr.splice()
+        })
+        alert('false')
+        return false
+    }, false)
+</script>
+</body>
+</html>
