@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        input[type="radio"], input[type="checkbox"] {
+            display: none;
+        }
+
+        label {
+            vertical-align: top;
+            position: relative;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+
+        .radio-component label {
+            border-radius: 50%;
+        }
+
+        .radio-component label::before {
+            width: 10px;
+            height: 10px;
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin: -5px 0 0 -5px;
+            content: '';
+            border-radius: 50%;
+            background-color: #d83c30;
+        }
+
+        .checkbox-component label::before {
+            content: '✓';
+            font-size:15px;
+            display: none;
+            vertical-align: top;
+            color: #d83c30;
+        }
+
+        input:checked + label::before {
+            display: block;
+        }
+
+        input:checked + label {
+            border-color: #d83c30;
+        }
+    </style>
+</head>
+<body>
+<div class="container text-center">
+    <div class="radio-component">
+        <input type="radio" id="radioID1" name="radioName" checked>
+        <label for="radioID1"></label>
+        <input type="radio" id="radioID2" name="radioName">
+        <label for="radioID2"></label>
+    </div>
+    <div class="checkbox-component">
+        <input type="checkbox" id="checkboxID1" name="checkboxName" checked>
+        <label for="checkboxID1"></label>
+        <input type="checkbox" id="checkboxID2" name="checkboxName">
+        <label for="checkboxID2"></label>
+    </div>
+</div>
+</body>
+</html>
