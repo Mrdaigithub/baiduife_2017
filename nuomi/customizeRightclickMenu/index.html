@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>customizeRightclickMenu</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        ul {
+            position: absolute;
+            display: inline-block;
+            list-style: none;
+            border: 1px solid #D0D0D0;
+            width: 220px;
+            padding: 5px 0;
+            border-radius: 5px;
+            margin: 0;
+        }
+
+        li {
+            line-height: 30px;
+            cursor: pointer;
+            text-indent: 15px;
+        }
+
+        li:hover {
+            background-color: #eee;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<ul id="menu" class="hide">
+    <li>Menu Item 1</li>
+    <li>Menu Item 2</li>
+</ul>
+<script>
+    const W_WIDTH = window.innerWidth
+    const W_HEIGHT = window.innerHeight
+    const $ = d => document.querySelectorAll(d)
+
+    let menu = document.querySelector('#menu')
+
+    window.oncontextmenu = (e) => {
+        let x = e.x,
+            y = e.y
+
+        e.preventDefault()
+        menu.style = ''
+        if (x <= W_WIDTH - 220) {
+            menu.style.left = `${x}px`
+        } else {
+            menu.style.right = `${W_WIDTH - x}px`
+        }
+        if (y <= W_WIDTH - 72) {
+            menu.style.top = `${y}px`
+        } else {
+            menu.style.bottom = `${W_HEIGHT - y}px`
+        }
+        menu.className = 'show'
+    }
+    document.addEventListener('click', e => {
+        let nodeName = e.target.nodeName
+        if (nodeName !== 'UL' && nodeName !== 'LI') {
+            menu.className = 'hide'
+        }
+        if (nodeName === 'LI'){
+            alert(e.target.innerHTML)
+        }
+    }, false)
+</script>
+</body>
+</html>
