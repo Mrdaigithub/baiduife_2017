@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <title>mouseBlur</title>
+    <style>
+        img, p {
+            transition: .5s;
+        }
+
+        img {
+            width: 300px;
+        }
+
+        .box {
+            position: relative;
+            width: 300px;
+            height: 227px;
+        }
+
+        .box:hover img {
+            filter: blur(3px);
+        }
+
+        .box:hover p {
+            transform: translate(0px, -150px);
+            opacity: 1;
+        }
+
+        .box p {
+            text-align: center;
+            transform: translate(0px, -130px);
+            opacity: 0;
+            color: #fff;
+            font-size: 25px;
+            font-family: cursive;
+            background-image: -webkit-linear-gradient(left, #dd5044, #1ba260, #ffce44, #dd5044, #1ba260, #ffce44, #dd5044);
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-size: 200% 100%;
+            animation: light 4s infinite linear;
+        }
+
+        .btns {
+            position: absolute;
+            top: 13px;
+            left: 50px;
+            width: 200px;
+            height: 200px;
+        }
+
+        .btns::before, .btns::after {
+            transform-origin: center;
+            transition: 1s;
+            position: absolute;
+            content: '';
+            width: 200px;
+            height: 200px;
+            display: block;
+            border: 3px solid #fff;
+        }
+
+        .btns::before {
+            transform: scaleY(0);
+            border-top: none;
+            border-bottom: none;
+        }
+
+        .btns::after {
+            transform: scaleX(0);
+            border-left: none;
+            border-right: none;
+        }
+
+        .box:hover .btns::before {
+            transform: scaleY(1);
+        }
+
+        .box:hover .btns::after {
+            transform: scaleX(1);
+        }
+
+        @-webkit-keyframes light {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: -100% 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="box center-block">
+    <img src="bg.jpg" alt="bg" class="center-block">
+    <p>This is a demo</p>
+    <div href="#" class="btns"></div>
+</div>
+</body>
+</html>
