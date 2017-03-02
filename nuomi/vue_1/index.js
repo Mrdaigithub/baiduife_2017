@@ -5,23 +5,46 @@ class Observer{
         this.data = data
         this.walk(data)
     }
-    walk(data){
-        for (let i in data){
-            Object.defineProperty(this.data,)
-            if (Object.prototype.toString.call(data[i]) === '[object Object]'){
-                this.walk(data[i])
+    walk(obj){
+        for (let key in obj){
+            if (obj.hasOwnProperty(key)){
+                let val = obj[key]
+                if (Object.prototype.toString.call(val) === '[object Object]'){
+                    this.walk(val)
+                }
+                this.convert(key,val)
             }
         }
     }
+    convert(key, val){
+        Object.defineProperty(this.data,key,{
+            enumerable: true,
+            configurable: true,
+            get(){
+                console.log(`你访问了 ${key}`)
+                return val
+            },
+            set(newVal){
+                console.log(`你设置了 ${key}，新的值为${newVal}`)
+            }
+        })
+    }
 }
+
 
 let app1 = new Observer({
     name: 'youngwind',
-    age: 25,
-    friend:{
-        'aaa':'aaaa',
-        'bbb':'bbbb'
-    }
-})
+    age: 25
+});
 
-console.log(app1)
+let app2 = new Observer({
+    university: 'bupt',
+    major: 'computer'
+});
+
+
+// 要实现的结果如下：
+app1.data.name // 你访问了 name
+app1.data.age = 100;  // 你设置了 age，新的值为100
+app2.data.university // 你访问了 university
+app2.data.major = 'science'  // 你设置了 major，新的值为 science
