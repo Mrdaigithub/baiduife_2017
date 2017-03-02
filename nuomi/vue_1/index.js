@@ -6,10 +6,10 @@ class Observer{
         this.walk(data)
     }
     walk(data){
-        if (Object.prototype.toString.call(data) === '[object Object]'){
-            for (let i in data){
-                console.log(i)
-                this.walk(i)
+        for (let i in data){
+            Object.defineProperty(this.data,)
+            if (Object.prototype.toString.call(data[i]) === '[object Object]'){
+                this.walk(data[i])
             }
         }
     }
@@ -24,3 +24,4 @@ let app1 = new Observer({
     }
 })
 
+console.log(app1)
