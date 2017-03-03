@@ -2,7 +2,7 @@
 
 class Observer{
     constructor(data){
-        this.data = data
+        this.data = {}
         this.walk(data)
     }
     walk(obj){
