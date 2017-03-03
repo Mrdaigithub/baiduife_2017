@@ -17,6 +17,17 @@ class Observer{
         }
     }
     convert(key,val){
+        for (let key in obj){
+            if (obj.hasOwnProperty(key)){
+                let val = obj[key]
+                if (Object.prototype.toString.call(val) === '[object Object]'){
+                    this.walk(val)
+                }
+                this.convert(key,val)
+            }
+        }
+    }
+    convert(key, val){
         Object.defineProperty(this.data,key,{
             enumerable: true,
             configurable: true,
@@ -30,6 +41,7 @@ class Observer{
         })
     }
 }
+
 
 let app1 = new Observer({
     name: 'youngwind',
