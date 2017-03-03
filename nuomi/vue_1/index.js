@@ -1,42 +1,15 @@
 "use strict";
 
-class Observer{
-    constructor(data){
-        this.data = {}
-        this.walk(data)
-    }
-    walk(obj){
-        for (let i in obj){
-            if (obj.hasOwnProperty(i)){
-                let val = obj[i]
-                if (Object.prototype.toString.call(val) === '[object Object]'){
-                    new Observer(val)
-                }
-                this.convert(i,val)
-            }
-        }
-    }
-    convert(key,val){
-        for (let key in obj){
-            if (obj.hasOwnProperty(key)){
-                let val = obj[key]
-                if (Object.prototype.toString.call(val) === '[object Object]'){
-                    this.walk(val)
-                }
-                this.convert(key,val)
-            }
-        }
-    }
-    convert(key, val){
-        Object.defineProperty(this.data,key,{
-            enumerable: true,
-            configurable: true,
-            get(){
+class Observer {
+    constructor(data) {
+        this.data = new Proxy(data, {
+            get: (target, key) => {
                 console.log(`你访问了 ${key}`)
-                return val
+                return Reflect.get(target, key);
             },
-            set(newVal){
+            set: (target, key, newVal) => {
                 console.log(`你设置了 ${key}，新的值为${newVal}`)
+                return Reflect.set(target, key, newVal);
             }
         })
     }
@@ -45,7 +18,11 @@ class Observer{
 
 let app1 = new Observer({
     name: 'youngwind',
-    age: 25
+    age: 25,
+    friend:{
+        lucks:'lucks',
+        evenline:'evenline',
+    }
 });
 
 let app2 = new Observer({
