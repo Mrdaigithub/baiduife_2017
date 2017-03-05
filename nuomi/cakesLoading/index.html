@@ -1,74 +1,136 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Css3 case loading</title>
-  <style>
-    *{
-      margin: 0;
-      padding: 0;
-    }
-    .inner{
-      position: relative;
-      width: 200px;
-      height:200px;
-      margin:0 auto;
-      background-color: #ff2a8c;
-      border-radius: 100px;
-    }
-    .spiner{
-      position: absolute;
-      width: 100px;
-      height:200px;
-      border-top-left-radius: 100px;
-      border-bottom-left-radius: 100px;
-      background-color: #fb8bbd;
-      transform-origin: right;
-      animation: toRotate 10s infinite linear;
-    }
-    .filler{
-      position: absolute;
-      right: 0;
-      width: 100px;
-      height:200px;
-      border-top-right-radius: 100px;
-      border-bottom-right-radius: 100px;
-      background-color: #fb8bbd;
-      animation: toHide 10s infinite steps(1,end);
-    }
-    .masker{
-      position: absolute;
-      left: 0;
-      width: 100px;
-      height:200px;
-      border-top-left-radius: 100px;
-      border-bottom-left-radius: 100px;
-      background-color: #ff2a8c;
-      opacity:0;
-      animation: toShow 10s infinite steps(1,end);
-    }
-    @keyframes toRotate {
-      0%   { transform: rotate(360deg); }
-      100% { transform: rotate(0deg); }
-    }
-    @keyframes toHide {
-      0%        { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-    @keyframes toShow {
-      0%        { opacity: 0; }
-      50%, 100% { opacity: 1; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Css3 case loading</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .wrap {
+            width: 200px;
+            position: relative;
+            margin: 100px auto
+        }
+
+        .outer {
+            position: absolute;
+            top:-50px;
+            left:-50px;
+            width: 300px;
+            height: 300px;
+            border-radius: 150px;
+            border:3px solid #ff4399;
+            border-top-color: transparent;
+            animation: spin 800ms infinite linear;
+        }
+
+        .inner, .inner2 {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .inner {
+            opacity: 1;
+            background-color: #fb8bbc;
+            animation: second-half-hide 1.6s steps(1, end) infinite;
+        }
+
+        .inner2 {
+            opacity: 0;
+            background-color: #ff298c;
+            animation: second-half-show 1.6s steps(1, end) infinite;
+        }
+
+        .spiner, .filler, .masker {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+        }
+
+        .spiner {
+            border-radius: 40px 0 0 40px;
+            background-color: #ff298c;
+            transform-origin: right center;
+            animation: spin 800ms infinite linear;
+            left: 0;
+            top: 0;
+        }
+
+        .filler {
+            border-radius: 0 40px 40px 0;
+            background-color: #ff298c;
+            animation: second-half-hide 800ms steps(1, end) infinite;
+            left: 50%;
+            top: 0;
+            opacity: 1;
+        }
+
+        .masker {
+            border-radius: 40px 0 0 40px;
+            background-color: #fb8bbc;
+            animation: second-half-show 800ms steps(1, end) infinite;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+
+        .inner2 .spiner, .inner2 .filler {
+            background-color: #fb8bbc;
+        }
+
+        .inner2 .masker {
+            background-color: #ff298c;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(360deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        @keyframes second-half-hide {
+            0% {
+                opacity: 1;
+            }
+            50%, 100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes second-half-show {
+            0% {
+                opacity: 0;
+            }
+            50%, 100% {
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="inner">
-  <div class="spiner"></div>
-  <div class="filler"></div>
-  <div class="masker"></div>
+<div class="wrap">
+    <div class="outer"></div>
+    <div class="inner">
+        <div class="spiner"></div>
+        <div class="filler"></div>
+        <div class="masker"></div>
+    </div>
+    <div class="inner2">
+        <div class="spiner"></div>
+        <div class="filler"></div>
+        <div class="masker"></div>
+    </div>
 </div>
 </body>
 </html>
