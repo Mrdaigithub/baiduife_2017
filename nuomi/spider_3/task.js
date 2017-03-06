@@ -1,5 +1,7 @@
 "use strict";
 
+
+var fs = require('fs')
 var page = require('webpage').create()
 var system = require('system')
 var devices = require('./devices.json')
@@ -18,7 +20,8 @@ var data = {
     device: deviceName
 }
 
-phantom.outputEncoding = 'gbk';
+phantom.outputEncoding = 'utf8';
+
 page.settings.userAgent = theDevice['userAgent']
 page.settings.viewportSize = {
     width: theDevice['viewportSize'].split('*')[0],

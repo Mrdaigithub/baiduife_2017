@@ -6,8 +6,87 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>3D banner</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            border: none;
+            outline: none;
+            box-sizing: border-box;
+        }
+        *:before,*:after{
+            box-sizing: border-box;
+        }
+        html,body{
+            min-height: 100%;
+        }
+        body{
+            background-image: radial-gradient(mintcream 0%, lightgray 100%);;
+        }
+        .container{
+            margin: 4% auto;
+            width: 210px;
+            height: 140px;
+            position: relative;
+            perspective: 1000px;
+        }
+        #carousel{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style:preserve-3d;
+            animation: rotation 20s infinite linear;
+        }
+        #carousel:hover{
+            animation-play-state: paused;
+        }
+        #carousel figure{
+            display: block;
+            position: absolute;
+            width: 220px;
+            height: 120px;
+            left: 10px;
+            top: 10px;
+            background: black;
+            overflow: hidden;
+            border: solid 5px black;
+        }
+        #carousel figure:nth-child(1){
+            background-color: #4e8df5;
+            transform: rotateY(0deg) translateZ(288px);
+        }
+        #carousel figure:nth-child(2){
+            background-color: #dd5044;
+            transform: rotateY(60deg) translateZ(288px);
+        }
+        #carousel figure:nth-child(3){
+            background-color: #ffce44;
+            transform: rotateY(120deg) translateZ(288px);
+        }
+        #carousel figure:nth-child(4){
+            background-color: #19a15e;
+            transform: rotateY(180deg) translateZ(288px);
+        }
+        #carousel figure:nth-child(5){
+            background-color: #39315e;
+            transform: rotateY(240deg) translateZ(288px);
+        }
+        #carousel figure:nth-child(6){
+            background-color: #b7c47f;
+            transform: rotateY(300deg) translateZ(288px);
+        }
+    </style>
 </head>
 <body>
-
+<div class="Container">
+    <div id="carousel">
+        <figure></figure>
+        <figure></figure>
+        <figure></figure>
+        <figure></figure>
+        <figure></figure>
+        <figure></figure>
+    </div>
+</div>
 </body>
 </html>
