@@ -48,7 +48,8 @@ page.open(url, function (s) {
             })
             return dataList
         })
-    } else {
+    }
+    else {
         data.code = 0
         data.msg = '抓取失败'
     }

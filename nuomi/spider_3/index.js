@@ -1,10 +1,12 @@
-"use strict";
+"use strict"
 
 const http = require('http')
 const url = require('url')
 const child_process = require('child_process')
-const mongoose = require('mongoose')
+const database = require('./database')
 
+const db = database.db
+const Ife = database.Ife
 
 const app = http.createServer((req, res) => {
     res.writeHead(200, {
@@ -18,31 +20,14 @@ const app = http.createServer((req, res) => {
         if (err) throw err
         if (stderr) throw `stderr: ${stderr}`
         if (typeof stdout === 'string') stdout = JSON.parse(stdout)
-        mongoose.connect('mongodb://127.0.0.1:27017/daisql')
-        const database = mongoose.connection
-        database.on('error', console.error.bind(console, 'connection error:'))
-        database.once('open', (cb) => {
-            let resultSchema = mongoose.Schema({
-                code: Number,
-                msg: String,
-                word: String,
-                time: Number,
-                dataList: [{
-                    info: String,
-                    link: String,
-                    pic: String,
-                    title: String,
-                }],
-                device: String
-            })
-            let Result = mongoose.model('Result', resultSchema)
-            let queryResult = new Result(stdout)
-            queryResult.save((err, queryResult) => {
-                if (err) throw err
-                console.log('save success')
-            })
+        db.on('error', console.error.bind(console, 'connection error:'))
+        db.once('open', (cb) => console.log('connection success'))
+        let resultJson = new Ife(stdout)
+        resultJson.save((err, doc) => {
+            if (err) throw err
+            console.log('save success')
+            res.end(JSON.stringify(doc, null, 4))
         })
-        res.end()
     })
 })
 
