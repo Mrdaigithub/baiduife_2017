@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <title>spider_4</title>
+</head>
+<body>
+<div id="app">
+  <div class="input-group">
+    <label for="keyword">keyword: </label>
+    <input id="keyword" type="text" v-model.trim.lazy="keyword">
+    {{keyword}}
+    <select v-model="deviceModel">
+      <option value="iPhone5">iPhone5</option>
+      <option value="iPhone6">iPhone6</option>
+      <option value="iPad">iPad</option>
+    </select>
+  </div>
+  <button class="btn btn-default" @click="submit">submit</button>
+  <div id="content">{{res}}</div>
+</div>
+<script src="node_modules/vue/dist/vue.min.js"></script>
+<script src="node_modules/axios/dist/axios.min.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

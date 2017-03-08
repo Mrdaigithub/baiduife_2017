@@ -1,0 +1,29 @@
+{
+  "name": "spider_4",
+  "version": "1.0.0",
+  "description": "spider_4",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --harmony  app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Mrdaigithub/baiduife_2017.git"
+  },
+  "keywords": [
+    "koa2"
+  ],
+  "author": "Mrdaigithub",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mrdaigithub/baiduife_2017/issues"
+  },
+  "homepage": "https://github.com/Mrdaigithub/baiduife_2017#readme",
+  "devDependencies": {
+    "axios": "^0.15.3",
+    "bootstrap": "^3.3.7",
+    "koa": "^2.1.0",
+    "koa-router": "^5.4.0",
+    "vue": "^2.2.1"
+  }
+}
