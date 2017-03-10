@@ -11,15 +11,14 @@
 <div id="app">
   <div class="input-group">
     <label for="keyword">keyword: </label>
-    <input id="keyword" type="text" v-model.trim.lazy="keyword">
-    {{keyword}}
-    <select v-model="deviceModel">
+    <input id="keyword" type="text" v-model.trim="keyword">
+    <select v-model="deviceName">
       <option value="iPhone5">iPhone5</option>
       <option value="iPhone6">iPhone6</option>
       <option value="iPad">iPad</option>
     </select>
   </div>
-  <button class="btn btn-default" @click="submit">submit</button>
+  <button class="btn btn-default" :disabled="!keyword.length" @click="submit">submit</button>
   <div id="content">{{res}}</div>
 </div>
 <script src="node_modules/vue/dist/vue.min.js"></script>

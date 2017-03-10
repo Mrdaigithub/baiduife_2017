@@ -4,7 +4,7 @@
   "description": "spider_4",
   "main": "index.js",
   "scripts": {
-    "dev": "node --harmony  app.js"
+    "dev": "supervisor --harmony app.js"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "axios": "^0.15.3",
     "bootstrap": "^3.3.7",
     "koa": "^2.1.0",
-    "koa-router": "^5.4.0",
+    "koa-body": "^1.6.0",
     "vue": "^2.2.1"
   }
 }
