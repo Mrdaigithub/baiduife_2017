@@ -6,8 +6,13 @@ const fs = require('fs')
 const path = require('path')
 const Koa = require('koa')
 const bodyParser = require('koa-bodyparser')
+const router = require('koa-router')()
 const request = require('request')
 const app = new Koa()
+const database = require('./database')
+
+const db = database.db
+const Ife = database.Ife
 
 const imgDirPath = path.resolve(__dirname,'images')
 
@@ -21,10 +26,11 @@ fs.exists(imgDirPath,exists=>{
     }
 })
 
+
 /**
  * 执行phantom命令
  * @param command
- * @returns {*}
+ * @returns {Promise}
  */
 let execCommand = command=>{
     return new Promise((resolve, reject)=>{
@@ -40,6 +46,7 @@ let execCommand = command=>{
 /**
  * 下载图片到本地通过时间戳生成唯一ID
  * @param picUrl
+ * @returns {Promise}
  */
 let downloadPic = (picUrl) =>{
     return new Promise((resolve, reject)=>{
@@ -50,7 +57,6 @@ let downloadPic = (picUrl) =>{
             if (err) reject(err)
             if (response.statusCode !== 200) reject('response statusCode error')
             let pic = `${imgDirPath}/${new Date().getTime()}.${response.headers['content-type'].split('/')[1]}`
-            console.log(pic)
             fs.writeFile(pic, picData, 'binary', pic_err=>{
                 if (pic_err) reject(pic_err)
                 resolve(pic)
@@ -60,47 +66,77 @@ let downloadPic = (picUrl) =>{
 }
 
 app.use(bodyParser())
+app.use(router.routes())
+
+var readFile = function (fileName) {
+    return new Promise(function (resolve, reject) {
+        fs.readFile(fileName, function(error, data) {
+            if (error) reject(error);
+            resolve(data);
+        });
+    });
+};
+
 
 // router
-app.use(async (ctx,next)=>{
+router.post('/', async (ctx, next)=>{
     ctx.set({
         'Access-Control-Allow-Origin': '*',
         'Server': 'Koa2'
     })
-    if (ctx.method === 'POST'){
-        ctx.status = 200
-        ctx.set('Content-Type', 'text/plain')
-        next()
-    }else{
-        ctx.status = 500
-        ctx.set('Content-Type', 'text/plain')
-        ctx.body = 'Request error'
-    }
+    ctx.state.args = {}
+    ctx.state.args.wd = ctx.request.body.keyword
+    let command = `phantomjs task.js ${ctx.request.body.keyword} ${ctx.request.body.deviceName}`
 })
 
-// exec task.js to get json data
-app.use(async (ctx,next)=>{
+
+// exec task.js to get json data and download picture in images direction
+app.use(async (ctx, next)=>{
+    ctx.state.args = {}
+    ctx.state.args.wd = ctx.request.body.keyword
     let command = `phantomjs task.js ${ctx.request.body.keyword} ${ctx.request.body.deviceName}`
-    async function asyncExecCommand () {
+    async function asyncExecDownload () {
         let result = await execCommand(command)
         for (let each of result.dataList){
             if (!each.pic) continue
-            await downloadPic(each.pic)
+            each.pic = await downloadPic(each.pic)
         }
+        return result
     }
-    asyncExecCommand()
-    // child_process.exec(command,(err, stdout, stderr)=>{
+    await new Promise((resolve, reject)=>{
+        setTimeout(function () {
+            ctx.body = 'asdsad'
+            resolve()
+        },1000)
+        // next()
+        // asyncExecDownload()
+        //     .then(res=>{
+        //         ctx.state.searchData = res
+        //         // next()
+        //     })
+        //     .catch(err=>{console.log(`throw error in row 93: ${err}`)})
+    })
+})
+
+// save the json data to mongodb database
+app.use(async (ctx, next)=>{
+    // db.on('error', console.error.bind(console, 'connection error:'))
+    // db.once('open', (cb) => console.log('connection success'))
+    // let resultJson = new Ife(ctx.state.searchData)
+    // resultJson.save((err, res) => {
     //     if (err) throw err
-    //     if (stderr) throw `stderr: ${stderr}`
-    //     let result = JSON.parse(stdout)
-    //     result.dataList.forEach(each=>{
-    //         let picUrl = each.pic
-    //         if (!picUrl) return
-    //         downloadPic(picUrl, pic=>{
-    //             each.pic = pic
-    //         })
-    //     })
+    //     console.log('save success')
+    //     // next()
     // })
 })
+
+// fetch data from mongodb database then response client
+app.use(async (ctx, next)=>{
+    Ife.findOne({'word':ctx.request.body.keyword},(err, datas)=>{
+        if (err) throw err
+        ctx.body = datas
+    })
+})
+
 
 app.listen(8080)

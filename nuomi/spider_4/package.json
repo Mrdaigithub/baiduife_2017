@@ -25,6 +25,8 @@
     "koa": "^2.1.0",
     "koa-body": "^1.6.0",
     "koa-bodyparser": "^4.1.0",
+    "koa-router": "^7.0.1",
+    "mongoose": "^4.8.6",
     "request": "^2.81.0",
     "vue": "^2.2.1"
   }
