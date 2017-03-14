@@ -65,17 +65,24 @@ let downloadPic = (picUrl) =>{
     })
 }
 
+
+// fetch data from mongodb database then response client
+let sql = (resultJson, ctx) =>{
+    return new Promise((resolve, reject)=>{
+        resultJson.save((err, res) => {
+            if (err) throw err
+            console.log('save success')
+            Ife.findOne({'word':ctx.request.body.keyword},(err, datas)=>{
+                if (err) reject(err)
+                resolve(JSON.stringify(datas,null,4))
+            })
+        })
+    })
+}
+
+
 app.use(bodyParser())
 app.use(router.routes())
-
-var readFile = function (fileName) {
-    return new Promise(function (resolve, reject) {
-        fs.readFile(fileName, function(error, data) {
-            if (error) reject(error);
-            resolve(data);
-        });
-    });
-};
 
 
 // router
@@ -86,56 +93,23 @@ router.post('/', async (ctx, next)=>{
     })
     ctx.state.args = {}
     ctx.state.args.wd = ctx.request.body.keyword
-    let command = `phantomjs task.js ${ctx.request.body.keyword} ${ctx.request.body.deviceName}`
-})
 
-
-// exec task.js to get json data and download picture in images direction
-app.use(async (ctx, next)=>{
-    ctx.state.args = {}
-    ctx.state.args.wd = ctx.request.body.keyword
+    // exec task.js to get json data and download picture in images direction
     let command = `phantomjs task.js ${ctx.request.body.keyword} ${ctx.request.body.deviceName}`
-    async function asyncExecDownload () {
-        let result = await execCommand(command)
-        for (let each of result.dataList){
-            if (!each.pic) continue
-            each.pic = await downloadPic(each.pic)
-        }
-        return result
+    let result = await execCommand(command)
+    for (let each of result.dataList){
+        if (!each.pic) continue
+        each.pic = await downloadPic(each.pic)
     }
-    await new Promise((resolve, reject)=>{
-        setTimeout(function () {
-            ctx.body = 'asdsad'
-            resolve()
-        },1000)
-        // next()
-        // asyncExecDownload()
-        //     .then(res=>{
-        //         ctx.state.searchData = res
-        //         // next()
-        //     })
-        //     .catch(err=>{console.log(`throw error in row 93: ${err}`)})
-    })
-})
+    ctx.state.searchData = result
 
-// save the json data to mongodb database
-app.use(async (ctx, next)=>{
-    // db.on('error', console.error.bind(console, 'connection error:'))
-    // db.once('open', (cb) => console.log('connection success'))
-    // let resultJson = new Ife(ctx.state.searchData)
-    // resultJson.save((err, res) => {
-    //     if (err) throw err
-    //     console.log('save success')
-    //     // next()
-    // })
-})
+    // save the json data to mongodb database
+    db.on('error', console.error.bind(console, 'connection error:'))
+    db.once('open', (cb) => console.log('connection success'))
+    let resultJson = new Ife(ctx.state.searchData)
 
-// fetch data from mongodb database then response client
-app.use(async (ctx, next)=>{
-    Ife.findOne({'word':ctx.request.body.keyword},(err, datas)=>{
-        if (err) throw err
-        ctx.body = datas
-    })
+    // fetch data from mongodb database then response client
+    ctx.body = await sql(resultJson, ctx)
 })
 
 

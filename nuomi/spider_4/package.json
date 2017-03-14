@@ -4,7 +4,7 @@
   "description": "spider_4",
   "main": "index.js",
   "scripts": {
-    "dev": "supervisor --harmony app.js"
+    "dev": "node --harmony app.js"
   },
   "repository": {
     "type": "git",
