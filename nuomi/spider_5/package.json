@@ -1,0 +1,33 @@
+{
+  "name": "spider_5",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mrdaigithub/baiduife_2017.git"
+  },
+  "keywords": [
+    "ife",
+    "spider"
+  ],
+  "author": "mrdai",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mrdaigithub/baiduife_2017/issues"
+  },
+  "homepage": "https://github.com/Mrdaigithub/baiduife_2017#readme",
+  "devDependencies": {
+    "koa": "^2.2.0",
+    "koa-bodyparser": "^4.1.0",
+    "koa-logger": "^2.0.1",
+    "koa-router": "^7.0.1",
+    "koa-static": "^3.0.0",
+    "koa-views": "^5.2.1",
+    "phantom": "^4.0.1",
+    "superagent": "^3.5.0"
+  }
+}
