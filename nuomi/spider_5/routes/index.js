@@ -11,6 +11,7 @@ router.get('/', async (ctx, next)=>{
 router.post('/task', async(ctx, next)=>{
     let {keyword, deviceName} = ctx.request.body
     let result = await spider(keyword, deviceName)
+    ctx.body = result
 })
 
 
