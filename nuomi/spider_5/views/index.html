@@ -9,45 +9,10 @@
   <title>网页抓取分析服务系列之五（并发控制）</title>
 </head>
 <body>
-<div class="container">
-  <div class="panel panel-default">
-    <div class="panel-heading">网页抓取分析服务系列之五（并发控制）</div>
-    <div class="panel-body row">
-      <div class="col-md-3">
-        <div class="input-group">
-          <input type="text" required="required" placeholder="请输入抓取关键字" aria-label="..." class="form-control">
-          <div class="input-group-btn"><button type="button" class="btn btn-primary">开始</button></div>
-        </div>
-      </div>
-      <div class="col-md-1">
-        <input type="number" class="form-control">
-      </div>
-      <div class="col-md-4">
-        <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox1" value="option1"> iPhone5
-        </label>
-        <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox2" value="option2"> iPhone6
-        </label>
-        <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox3" value="option3"> iPad
-        </label>
-      </div>
-      <div class="col-md-4">
-        <span class="label label-primary">处理中：0</span>
-        <span class="label label-success">已完成：0</span>
-        <span class="label label-danger">失败：0</span>
-        <span class="label label-info">总计：0</span>
-      </div>
-    </div>
-    <div class="table">
-      <table class="table table-bordered table-striped table-condensed table-hover">
-        <thead><tr><th>模拟设备名</th> <th>缩略图</th> <th>标题</th> <th>摘要</th> <th>链接</th></tr></thead>
-      </table>
-    </div>
-  </div>
+<div id="app">
+  <input type="text" v-model="msg">
+  <p>{{msg}}</p>
 </div>
-<script src="js/vue.min.js"></script>
-<script src="js/index.js"></script>
+<script src="js/index.min.js"></script>
 </body>
 </html>
