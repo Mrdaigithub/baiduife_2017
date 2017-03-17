@@ -1,8 +1,5 @@
 "use strict";
 
-const app = new Vue({
-    data:{
-        msg:'hello world!'
-    }
-}).$mount('#app')
-
+let aa = ()=>{
+    console.log('aa')
+}
