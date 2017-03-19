@@ -32,8 +32,10 @@
     "koa-views": "^5.2.1",
     "mongoose": "^4.9.0",
     "phantom": "^4.0.1",
+    "socket.io": "^1.7.3",
     "superagent": "^3.5.0",
-    "vue": "^2.2.4"
+    "vue": "^2.2.4",
+    "vue-socket.io": "^2.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",

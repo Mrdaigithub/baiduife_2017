@@ -12,10 +12,13 @@ router.get('/', async(ctx, next) => {
 router.post('/task', async(ctx, next) => {
     let {keyword, devices, pageNum} = ctx.request.body
     let result = await spider(keyword, devices, pageNum)
-    db.on('error', console.error.bind(console, 'connection error:'))
-    db.once('open', (cb) => console.log('connection success'))
-    new Ife(result)
     ctx.body = result
+    result.forEach(e=>{
+        new Ife(e).save((err,content)=>{
+            if (err) throw err
+            console.log('save success')
+        })
+    })
 })
 
 module.exports = router

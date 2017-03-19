@@ -32,5 +32,5 @@ const app = http.createServer((req, res) => {
 })
 
 app.listen(8000, () => {
-    console.log('server is running')
+    console.log('serverStatic is running')
 })

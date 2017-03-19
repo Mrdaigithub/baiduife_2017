@@ -13,7 +13,7 @@ const picDir = `${__dirname}/static/pic`
  * @returns {Promise}
  */
 function downloadPic(picUrl) {
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
         let picName = `${new Date().getTime()}.jpg`
         request
             .get(picUrl)
@@ -29,7 +29,7 @@ function downloadPic(picUrl) {
 
 async function spider(keyword, devices, pageNum) {
     let result = []
-    try{
+    try {
         let url = encodeURI(`https://www.baidu.com/s?wd=${keyword}&pn=${pageNum}`)
         let instance = await phantoms.create([], {logLevel: 'error'})
         let page = await instance.createPage()
@@ -37,7 +37,7 @@ async function spider(keyword, devices, pageNum) {
         let status = await page.open(url);
         if (status !== 'success') throw Error({message: 'open failed'})
         if (devices.length) {
-            for (let device of devices){
+            for (let device of devices) {
                 page.setting('userAgent', deviceCfg[device].userAgent)
                 page.property('viewportSize', {
                     width: deviceCfg[device].viewportSize.split('*')[0],
@@ -53,7 +53,7 @@ async function spider(keyword, devices, pageNum) {
                         }
                     }).toArray();
                 })
-                for (let each of dataList){
+                for (let each of dataList) {
                     if (!each.pic) continue
                     each.pic = await downloadPic(each.pic)
                 }
@@ -69,8 +69,8 @@ async function spider(keyword, devices, pageNum) {
             await instance.exit()
             return result
         }
-    }catch (err){
-        return {code:0, msg: '抓取失败', err: err.message}
+    } catch (err) {
+        return {code: 0, msg: '抓取失败', err: err.message}
     }
 }
 

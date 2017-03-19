@@ -22,7 +22,9 @@ const ifeSchema = mongoose.Schema({
 
 const Ife = mongoose.model('Ife', ifeSchema)
 
+db.on('error', console.error.bind(console, 'database connection error:'))
+db.once('open', (cb) => console.log('database connection success'))
+
 module.exports = {
-    db,
     Ife
 }
