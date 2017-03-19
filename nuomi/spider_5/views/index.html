@@ -5,13 +5,46 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/index.css">
   <title>网页抓取分析服务系列之五（并发控制）</title>
 </head>
 <body>
-<div id="app">
-  <input type="text" v-model="msg">
-  <p>{{msg}}</p>
+<div id="app" class="container">
+  <div class="panel-body row">
+    <div class="col-md-3">
+      <div class="input-group">
+        <input type="text" required="required" v-model.trim="keyword" placeholder="keyword" aria-label="..." class="form-control">
+        <div class="input-group-btn"><button type="button" class="btn btn-primary" @click="start" :disabled="!startState">开始</button></div>
+      </div>
+    </div>
+    <div class="col-md-3 form-group">
+      <input type="number" class="form-control" v-model.number="pageNum">
+    </div>
+    <div class="col-md-4">
+      <label class="checkbox-inline">
+        <input type="checkbox" id="inlineCheckbox1" value="iPhone5" v-model="devices"> iPhone5
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" id="inlineCheckbox2" value="iPhone6" v-model="devices"> iPhone6
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" id="inlineCheckbox3" value="iPad" v-model="devices"> iPad
+      </label>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-condensed table-hover">
+      <thead><tr><th>Device</th> <th>Picture</th> <th>Title</th> <th>Info</th> <th>Link</th></tr></thead>
+      <tbody v-if="result.length">
+      <tr v-for="each of result">
+        <td>{{each.device}}</td>
+        <td><img :src="each.pic" alt=""></td>
+        <td>{{each.title}}</td>
+        <td>{{each.info}}</td>
+        <td>{{each.url}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 <script src="js/index.min.js"></script>
 </body>

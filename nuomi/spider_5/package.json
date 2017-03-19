@@ -4,7 +4,7 @@
   "description": "spider_5",
   "main": "app.js",
   "scripts": {
-    "build": "webpack -wp",
+    "build": "webpack -w",
     "dev": "node --harmony app.js"
   },
   "repository": {
@@ -30,6 +30,7 @@
     "koa-router": "^7.0.1",
     "koa-static": "^3.0.0",
     "koa-views": "^5.2.1",
+    "mongoose": "^4.9.0",
     "phantom": "^4.0.1",
     "superagent": "^3.5.0",
     "vue": "^2.2.4"
