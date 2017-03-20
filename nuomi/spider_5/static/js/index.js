@@ -10,12 +10,17 @@ const app = new Vue({
     data: {
         keyword: 'java',
         pageNum: 1,
-        devices: [],
-        result: []
+        devices: ['iPhone5', 'iPhone6', 'iPad', 'iPhone7', 'iPhone8', 'iPhone9'],
+        result: [],
+        totalProcessNum: 0,
+        completedProcessNum: 0
     },
     computed: {
         startState: function () {
             return !!this.keyword && this.pageNum > 0 && !!this.devices.length
+        },
+        processVal: function () {
+            return this.completedProcessNum / this.totalProcessNum
         }
     },
     methods: {
@@ -48,8 +53,14 @@ const app = new Vue({
         connect: function () {
             console.log('socket connected')
         },
-        started: function (result) {
-            console.log(result)
+        started: function (res) {
+            res.dataList.forEach(function (each) {
+                each.device = res.device
+                console.log(this)
+                // this.result.unshift(each)
+            })
+            // this.totalProcessNum = result.totalProcessNum
+            // this.completedProcessNum = result.completedProcessNum
         }
     }
 }).$mount('#app')

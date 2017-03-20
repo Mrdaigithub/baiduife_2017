@@ -4,7 +4,7 @@
   "description": "spider_5",
   "main": "app.js",
   "scripts": {
-    "build": "webpack -w",
+    "build": "webpack -wp",
     "dev": "node --harmony app.js"
   },
   "repository": {

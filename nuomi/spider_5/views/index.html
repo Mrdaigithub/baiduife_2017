@@ -16,7 +16,7 @@
         <div class="input-group-btn"><button type="button" class="btn btn-primary" @click="start" :disabled="!startState">开始</button></div>
       </div>
     </div>
-    <div class="col-md-3 form-group">
+    <div class="col-md-1 form-group">
       <input type="number" class="form-control" v-model.number="pageNum">
     </div>
     <div class="col-md-4">
@@ -29,18 +29,32 @@
       <label class="checkbox-inline">
         <input type="checkbox" id="inlineCheckbox3" value="iPad" v-model="devices"> iPad
       </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" id="inlineCheckbox4" value="iPhone7" v-model="devices"> iPhone7
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" id="inlineCheckbox5" value="iPhone8" v-model="devices"> iPhone8
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" id="inlineCheckbox6" value="iPhone9" v-model="devices"> iPhone9
+      </label>
+    </div>
+    <div class="col-md-4">
+      <div class="progress">
+        <div class="progress-bar progress-bar-info progress-bar-striped active" style="min-width: 2rem" :style="{width: processVal + '%'}">{{completedProcessNum}}/{{totalProcessNum}}</div>
+      </div>
     </div>
   </div>
   <div class="table-responsive">
     <table class="table table-bordered table-striped table-condensed table-hover">
-      <thead><tr><th>Device</th> <th>Picture</th> <th>Title</th> <th>Info</th> <th>Link</th></tr></thead>
-      <tbody v-if="result.length">
+      <thead><tr><th>Device</th> <th>Picture</th> <th>Title</th> <th>Info</th> <th>Url</th></tr></thead>
+      <tbody>
       <tr v-for="each of result">
         <td>{{each.device}}</td>
-        <td><img :src="each.pic" alt=""></td>
-        <td>{{each.title}}</td>
-        <td>{{each.info}}</td>
-        <td>{{each.url}}</td>
+        <!--<td><img :src="each.pic" alt=""></td>-->
+        <!--<td>{{each.title}}</td>-->
+        <!--<td>{{each.info}}</td>-->
+        <!--<td>{{each.url}}</td>-->
       </tr>
       </tbody>
     </table>

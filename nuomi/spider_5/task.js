@@ -27,8 +27,7 @@ function downloadPic(picUrl) {
 }
 
 
-async function spider(keyword, devices, pageNum) {
-    let result = []
+async function spider({keyword, device, pageNum}) {
     try {
         let url = encodeURI(`https://www.baidu.com/s?wd=${keyword}&pn=${pageNum}`)
         let instance = await phantoms.create([], {logLevel: 'error'})
@@ -36,38 +35,35 @@ async function spider(keyword, devices, pageNum) {
         let startTime = new Date()
         let status = await page.open(url);
         if (status !== 'success') throw Error({message: 'open failed'})
-        if (devices.length) {
-            for (let device of devices) {
-                page.setting('userAgent', deviceCfg[device].userAgent)
-                page.property('viewportSize', {
-                    width: deviceCfg[device].viewportSize.split('*')[0],
-                    height: deviceCfg[device].viewportSize.split('*')[1]
-                })
-                let dataList = await page.evaluate(function () {
-                    return $('#content_left .result.c-container').map(function () {
-                        return {
-                            title: $(this).find('.t').text() || '',
-                            url: $(this).find('.t > a').attr('href') || '',
-                            info: $(this).find('.c-abstract').text() || '',
-                            pic: $(this).find('.c-img').attr('src') || ''
-                        }
-                    }).toArray();
-                })
-                for (let each of dataList) {
-                    if (!each.pic) continue
-                    each.pic = await downloadPic(each.pic)
-                }
-                result.push({
-                    code: 1,
-                    msg: '抓取成功',
-                    word: keyword,
-                    time: Date.now() - startTime,
-                    device,
-                    dataList
-                })
+        if (device) {
+            page.setting('userAgent', deviceCfg[device].userAgent)
+            page.property('viewportSize', {
+                width: deviceCfg[device].viewportSize.split('*')[0],
+                height: deviceCfg[device].viewportSize.split('*')[1]
+            })
+            let dataList = await page.evaluate(function () {
+                return $('#content_left .result.c-container').map(function () {
+                    return {
+                        title: $(this).find('.t').text() || '',
+                        url: $(this).find('.t > a').attr('href') || '',
+                        info: $(this).find('.c-abstract').text() || '',
+                        pic: $(this).find('.c-img').attr('src') || ''
+                    }
+                }).toArray();
+            })
+            for (let each of dataList) {
+                if (!each.pic) continue
+                each.pic = await downloadPic(each.pic)
             }
             await instance.exit()
-            return result
+            return {
+                code: 1,
+                msg: '抓取成功',
+                word: keyword,
+                time: Date.now() - startTime,
+                device,
+                dataList
+            }
         }
     } catch (err) {
         return {code: 0, msg: '抓取失败', err: err.message}
