@@ -10,10 +10,10 @@ module.exports = function (app, port) {
     const server = require('http').createServer(app.callback())
     const io = require('socket.io')(server)
 
-    let totalProcess = [],
+    let totalProcessNum = 0,
+        completedProcessNum = 0,
         waitProcess = [],
         currentProcess = [],
-        completedProcess = [],
         processClock = false
 
     io.on('connection', socket => {
@@ -23,6 +23,7 @@ module.exports = function (app, port) {
         })
         socket.on('start', async({keyword, devices, pageNum}) => {
             let process = createProcess({keyword, devices, pageNum}) // 新增进程
+            totalProcessNum += process.length
             waitProcess = waitProcess.concat(process) // 待处理进程
             if (processClock) return
             processClock = true
@@ -30,6 +31,8 @@ module.exports = function (app, port) {
             while (currentProcess.length) {
                 if (currentProcess.length < 5) currentProcess = currentProcess.concat(waitProcess.splice(0, 5 - currentProcess.length)) // 处理队列中的进程
                 let result = await spider(currentProcess.shift())
+                result.totalProcessNum = totalProcessNum
+                result.completedProcessNum = ++completedProcessNum
                 io.emit('started', result)
             }
             processClock = false

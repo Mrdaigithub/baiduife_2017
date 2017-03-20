@@ -4,7 +4,7 @@
   "description": "spider_5",
   "main": "app.js",
   "scripts": {
-    "build": "webpack -wp",
+    "build": "webpack -w",
     "dev": "node --harmony app.js"
   },
   "repository": {
@@ -22,7 +22,6 @@
   },
   "homepage": "https://github.com/Mrdaigithub/baiduife_2017/tree/master/nuomi/spider_5#readme",
   "dependencies": {
-    "axios": "^0.15.3",
     "bootstrap": "^3.3.7",
     "koa": "^2.2.0",
     "koa-bodyparser": "^4.1.0",
