@@ -1,6 +1,8 @@
 # Spider_5
 
-<a href="https://github.com/Mrdaigithub/baiduife_2017/tree/master/nuomi/spider_5"><img src="https://img.shields.io/npm/l/vue-socket.io.svg" alt="License"></a>
+![nodejs](https://img.shields.io/badge/nodejs-7.7.1-blue.svg)
+![npm](https://img.shields.io/badge/npm-4.12-blue.svg)
+![license](https://img.shields.io/badge/license-MIT-blue.svg)
 
 Baidu IFE Sider_5 task
 
