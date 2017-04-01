@@ -1,65 +1,66 @@
-"use strict";
+"use strict"
 
-class Pubsub{
-    constructor(){
+class Pubsub {
+    constructor() {
         this.handlers = {}
     }
 
-    // 注册事件
-    on(eventType,cb){
-        if (!this.handlers.hasOwnProperty(eventType)){
+    on(eventType, cb) {
+        if (!this.handlers.hasOwnProperty(eventType)) {
             this.handlers[eventType] = []
         }
         this.handlers[eventType].push(cb)
     }
 
-    // 触发事件
-    emit(eventType, ...args){
+    emit(eventType, ...args) {
         if (!this.handlers.hasOwnProperty(eventType)) return
-        this.handlers[eventType].forEach((handler)=>{
-            handler(...args)
+        this.handlers[eventType].forEach(cb => {
+            cb(...args)
         })
     }
 }
 
-class Observer{
-    constructor(data){
+
+class Observer {
+    constructor(data) {
         this.data = data
         this.emitter = new Pubsub()
-        this.walk(data)
+        this.walk(this.data)
     }
-    walk(obj){
-        for (let i in obj){
-            if (obj.hasOwnProperty(i)){
-                let val = obj[i]
-                if (Object.prototype.toString.call(val) === '[object Object]'){
+    walk(obj) {
+        let val
+        for (let key in obj) {
+            val = obj[key]
+            if (obj.hasOwnProperty(key)) {
+                if (Object.prototype.toString.call(val) === "[object Object]") {
                     new Observer(val)
                 }
-                this.convert(i, val)
+                this.convert(key, val)
             }
         }
     }
-    convert(key, val){
+    convert(key, val) {
         let self = this
         Object.defineProperty(this.data, key, {
-            configurable:true,
-            enumerable:true,
+            configurable: true,
+            enumerable: true,
             get(){
-                console.log(`你访问了 ${key}`)
+                console.log('你访问了' + key);
                 return val
             },
             set(newVal){
-                console.log(`你设置了 ${key}，新的值为${newVal}`)
-                if (Object.prototype.toString.call(newVal) === '[object Object]'){
+                if (val === newVal) return
+                if (Object.prototype.toString.call(newVal) === "[object Object]"){
                     new Observer(newVal)
                 }
+                console.log(`你设置了 ${key}，新的值为${newVal}`)
                 self.emitter.emit(key, newVal, val)
                 val = newVal
             }
         })
     }
-    $watch(key,cb){
-        this.emitter.on(key,cb)
+    $watch(key, cb){
+        this.emitter.on(key, cb)
     }
 }
 
@@ -80,9 +81,13 @@ app2.data.name.firstName = 'hahaha';
 app2.data.name.lastName = 'blablabla';
 // 输出：我的姓名发生了变化，可能是姓氏变了，也可能是名字变了。
 
-// // 你需要实现 $watch 这个 API
-// app1.$watch('age', function(age) {
-//     console.log(`我的年纪变了，现在已经是：${age}岁了`)
-// });
-//
-// app1.data.age = 100; // 输出：'我的年纪变了，现在已经是100岁了'
+
+
+
+
+// 1. 获取图片源文件
+// 2. 将图片全部重命名为timeStamp_md5
+// 3. 将其存入ftp
+// 4. 查询数据库获取全部文章body
+// 5. 遍历body内的图片路径下载计算md5值与原图片文件名匹配
+// 6. 相同就替换原图片的路径
