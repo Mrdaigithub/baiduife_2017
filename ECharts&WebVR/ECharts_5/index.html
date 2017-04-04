@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ECharts_5</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+<div id="main" style="width: 100vw;height: 100vh"></div>
+<script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/echarts/3.5.0/echarts.min.js"></script>
+<script>
+    let myCharts = echarts.init(document.querySelector('#main'))
+
+    /**
+     * 处理原始数据
+     * @param rawData
+     * @returns {{categoryData: Array, values: Array, volumeData: Array}}
+     */
+    function splitData(rawData) {
+        let categoryData = [],
+            values = [],
+            volumeData = []
+
+        for (var i = 0; i < rawData.length; i++) {
+            categoryData.push(rawData[i].shift())
+            volumeData.push(rawData[i].pop())
+            let statck = rawData[i].splice(1, 2)
+            values.push(rawData[i].concat(statck))
+        }
+        return {categoryData, values, volumeData}
+    }
+
+    /**
+     * 计算MA
+     * @param data0
+     * @param dayCount
+     * @returns {Array}
+     */
+    function calculateMA(data0, dayCount) {
+        var result = [];
+        for (var i = 0, len = data0.values.length; i < len; i++) {
+            if (i < dayCount) {
+                result.push('-');
+                continue;
+            }
+            var sum = 0;
+            for (var j = 0; j < dayCount; j++) {
+                sum += Number(data0.values[i - j][3]);
+            }
+            result.push(sum / dayCount);
+        }
+        return result;
+    }
+
+    class Thirtyday {
+        constructor(rawdate, values, MADates) {
+            this.rawdate = rawdate
+            this.values = values
+            this.MADates = MADates
+
+            //初始化首次进入的 30 天时间
+            this.theThirtyday = []
+            this.oneDay = 24 * 3600 * 1000;
+            let base = +new Date(this.parseDate(this.rawdate[0]))
+            let dates = [].concat(this.rawdate)
+            for (let date of dates) {
+                if (+new Date(this.parseDate(date)) <= base + this.oneDay * 30) {
+                    this.theThirtyday.push(date)
+                    this.rawdate.shift()
+                }
+            }
+
+            //初始化首次进入的日K数据
+            this.theThirtyValues = this.values.splice(0, this.theThirtyday.length)
+
+            //初始化首次进入的日K数据
+            this.theThirtyMADates = this.MADates.map(e => e.splice(0, this.theThirtyday.length))
+        }
+
+        /**
+         * 解析日期
+         * example: 20090202 --> ['2009', '02', '02']
+         * @param date
+         * @returns {[*,*,*]}
+         */
+        parseDate(date) {
+            date = date.split('')
+            return [date.splice(0, 4).join(''), date.splice(0, 2).join(''), date.join('')]
+        }
+
+        /**
+         * 更新日期
+         * @returns {*}
+         */
+        update() {
+            if (this.rawdate.length <= 1) return false
+            this.theThirtyday.shift()
+            this.theThirtyday.push(this.rawdate.shift())
+            return this.theThirtyday
+        }
+
+        /**
+         * 更新日K数据
+         * @returns {*|Array.<T>}
+         */
+        updateKDate() {
+            this.theThirtyValues.shift()
+            this.theThirtyValues.push(this.values.shift())
+            return this.theThirtyValues
+        }
+
+        /**
+         * 更新MA数据
+         * @returns {*|Array.<T>}
+         */
+        updateMADate() {
+            this.theThirtyMADates.forEach(e => e.shift())
+            let arr = this.MADates.map(e => e.shift())
+            for (let i = 0, len = this.theThirtyMADates.length; i < len; i++) {
+                this.theThirtyMADates[i].push(arr.shift())
+            }
+            return this.theThirtyMADates
+        }
+    }
+
+    myCharts.setOption({
+        backgroundColor: '#21202D',
+        animation: false,
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                animation: false,
+                type: 'cross',
+                lineStyle: {
+                    color: '#376df4',
+                    width: 2,
+                    opacity: 1
+                }
+            }
+        },
+        legend: {
+            data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30'],
+            inactiveColor: '#777',
+            textStyle: {
+                color: '#fff'
+            }
+        },
+        grid: {
+            left: '10%',
+            right: '10%',
+            bottom: '15%'
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            axisLine: {lineStyle: {color: '#8392A5'}}
+        },
+        yAxis: {
+            scale: true,
+            axisLine: {lineStyle: {color: '#8392A5'}},
+            splitLine: {show: false}
+        },
+        series: [
+            {
+                type: 'candlestick',
+                name: '日K',
+                itemStyle: {
+                    normal: {
+                        color: '#FD1050',
+                        color0: '#0CF49B',
+                        borderColor: '#FD1050',
+                        borderColor0: '#0CF49B'
+                    }
+                }
+            },
+            {
+                name: 'MA5',
+                type: 'line',
+                smooth: true,
+                showSymbol: false,
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
+                }
+            },
+            {
+                name: 'MA10',
+                type: 'line',
+                smooth: true,
+                showSymbol: false,
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
+                }
+            },
+            {
+                name: 'MA20',
+                type: 'line',
+                smooth: true,
+                showSymbol: false,
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
+                }
+            },
+            {
+                name: 'MA30',
+                type: 'line',
+                smooth: true,
+                showSymbol: false,
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
+                }
+            }
+        ]
+    })
+    myCharts.showLoading()
+    $.getJSON('/sp500hst.json', function (data) {
+        let data0 = splitData(data)
+        let thirtyday = new Thirtyday(data0.categoryData, data0.values, [calculateMA(data0, 5), calculateMA(data0, 10), calculateMA(data0, 20), calculateMA(data0, 30)])
+        myCharts.hideLoading()
+        let timer = setInterval(() => {
+            let date = thirtyday.update()
+            let MADate = thirtyday.updateMADate()
+            if (!date) return clearInterval(timer)
+            myCharts.setOption({
+                xAxis: {
+                    data: thirtyday.update()
+                },
+                series: [
+                    {
+                        name: '日K',
+                        data: thirtyday.updateKDate()
+                    },
+                    {
+                        name: 'MA5',
+                        data: MADate[0]
+                    },
+                    {
+                        name: 'MA10',
+                        data: MADate[1]
+                    },
+                    {
+                        name: 'MA20',
+                        data: MADate[2]
+                    },
+                    {
+                        name: 'MA30',
+                        data: MADate[3]
+                    }
+                ]
+            })
+        }, 200)
+    })
+</script>
+</body>
+</html>
