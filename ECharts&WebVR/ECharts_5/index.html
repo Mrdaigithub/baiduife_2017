@@ -229,7 +229,7 @@
         ]
     })
     myCharts.showLoading()
-    $.getJSON('/sp500hst.json', function (data) {
+    $.getJSON('./sp500hst.json', function (data) {
         let data0 = splitData(data)
         let thirtyday = new Thirtyday(data0.categoryData, data0.values, [calculateMA(data0, 5), calculateMA(data0, 10), calculateMA(data0, 20), calculateMA(data0, 30)])
         myCharts.hideLoading()
